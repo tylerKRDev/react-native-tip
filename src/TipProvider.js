@@ -132,29 +132,33 @@ export default class TipProvider extends Component {
     const {
       dismissable = true,
       onDismiss,
-      overlayOpacity = this.props.overlayOpacity
-    } = this.state
+      overlayOpacity
+    } = this.state;
 
     return (
       <TouchableWithoutFeedback
         onPress={() => {
           if (onDismiss) {
-            onDismiss()
+            onDismiss();
           } else {
-            dismissable && this.closeTip()
+            dismissable && this.closeTip();
           }
         }}
       >
-        <Animated.View style={{
-          ...StyleSheet.absoluteFill,
-          opacity: this.overlayAnimation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1]
-          }),
-          backgroundColor: `rgba(0,0,0,${overlayOpacity || 0.6})`
-        }} />
+        <Animated.View
+          style={{
+            ...StyleSheet.absoluteFill,
+            opacity: this.overlayAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1]
+            }),
+            backgroundColor: this.props.overlayComponent ? "rgba(0,0,0,0)" : `rgba(0,0,0,${overlayOpacity || 0.6})`
+          }}
+        >
+          {this.props.overlayComponent}
+        </Animated.View>
       </TouchableWithoutFeedback>
-    )
+    );
   }
 
   getTipAnimation() {
