@@ -132,6 +132,7 @@ export default class TipProvider extends Component {
         const {
             dismissable = true,
             onDismiss,
+            tourProps,
             overlayOpacity
         } = this.state;
 
