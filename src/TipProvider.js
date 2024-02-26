@@ -133,7 +133,8 @@ export default class TipProvider extends Component {
             dismissable = true,
             onDismiss,
             tourProps,
-            overlayOpacity
+            overlayComponent = this.props.overlayComponent,
+            overlayOpacity = this.props.overlayOpacity
         } = this.state;
 
         return (
@@ -155,10 +156,10 @@ export default class TipProvider extends Component {
                             inputRange: [0, 1],
                             outputRange: [0, 1]
                         }),
-                        backgroundColor: this.props.overlayComponent ? "rgba(0,0,0,0)" : `rgba(0,0,0,${overlayOpacity || 0.6})`
+                        backgroundColor: !tourProps && overlayComponent ? "rgba(0,0,0,0)" : `rgba(0,0,0,${overlayOpacity || 0.6})`
                     }}
                 >
-                    {this.props.overlayComponent}
+                    {!tourProps && overlayComponent}
                 </Animated.View>
             </TouchableWithoutFeedback>
         );
