@@ -142,7 +142,8 @@ export default class TipProvider extends Component {
                 onPress={() => {
                     if (onDismiss) {
                         onDismiss();
-                    } else if (tourProps?.nextId && this.props.tourUnskippable) {
+                    }
+                    if (tourProps?.nextId && this.props.tourUnskippable) {
                         TipManager.changeTipTour(tourProps, 'next')
                     } else {
                         dismissable && this.closeTip();
@@ -344,7 +345,7 @@ export default class TipProvider extends Component {
                             </>
                     }
 
-                    {tourProps &&
+                    {(tourProps?.prevId || tourProps?.nextId) &&
                         <View style={styles.actions}>
                             {
                                 !!tourProps.prevId &&
