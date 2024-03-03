@@ -381,7 +381,12 @@ export default class TipProvider extends Component {
                                 !!tourProps.prevId && !tourProps.nextId &&
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={this.closeTip}
+                                    onPress={() => {
+                                        if (tourProps.nextAction) {
+                                            tourProps.nextAction()
+                                        }
+                                        this.closeTip()
+                                    }}
                                     style={_prevNextButtonStyle}
                                 >
                                     <Text style={_prevNextTextStyle}>
