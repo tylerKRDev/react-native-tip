@@ -43,6 +43,14 @@ export default class TipProvider extends Component {
     }
 
     closeTip = () => {
+        const {
+            tourProps
+        } = this.state
+
+        // end of tour
+        if (!tourProps?.nextId && tourProps?.nextAction) {
+            tourProps.nextAction()
+        }
         this.animateOut()
     }
 
@@ -142,8 +150,7 @@ export default class TipProvider extends Component {
                 onPress={() => {
                     if (onDismiss) {
                         onDismiss();
-                    }
-                    if (tourProps?.nextId && this.props.tourUnskippable) {
+                    } if (tourProps?.nextId && this.props.tourUnskippable) {
                         TipManager.changeTipTour(tourProps, 'next')
                     } else {
                         dismissable && this.closeTip();
@@ -381,12 +388,7 @@ export default class TipProvider extends Component {
                                 !!tourProps.prevId && !tourProps.nextId &&
                                 <TouchableOpacity
                                     activeOpacity={0.5}
-                                    onPress={() => {
-                                        if (tourProps.nextAction) {
-                                            tourProps.nextAction()
-                                        }
-                                        this.closeTip()
-                                    }}
+                                    onPress={this.closeTip}
                                     style={_prevNextButtonStyle}
                                 >
                                     <Text style={_prevNextTextStyle}>
