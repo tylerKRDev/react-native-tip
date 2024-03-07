@@ -1,36 +1,36 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
+import 'react-native-get-random-values'
 import uuid from 'react-native-uuid';
 import TipManager from './TipManager'
 
-const Tip = (props) => {
-    const {
-        id,
-        children,
-        title,
-        body,
-        titleStyle,
-        bodyStyle,
-        tipContainerStyle,
-        dismissable,
-        renderTip,
-        overlayComponent,
-        overlayOpacity,
-        showItemPulseAnimation,
-        pulseColor,
-        onPressItem,
-        onDismiss,
-        onTipPress,
-        style,
-        active = true,
-        activeItemStyle,
-        pulseStyle,
-        pulseIntensity
-    } = props
+const Tip = ({
+    id,
+    children,
+    title,
+    body,
+    titleStyle,
+    bodyStyle,
+    tipContainerStyle,
+    dismissable,
+    renderTip,
+    overlayComponent,
+    overlayOpacity,
+    showItemPulseAnimation,
+    pulseColor,
+    onPressItem,
+    onDismiss,
+    onTipPress,
+    style,
+    active = true,
+    activeItemStyle,
+    pulseStyle,
+    pulseIntensity
+}) => {
 
-    const tipId = React.useRef('')
+    const tipId = useRef('')
 
-    React.useEffect(() => {
+    useEffect(() => {
         return () => TipManager.unregisterTip(tipId.current)
     }, [])
 
