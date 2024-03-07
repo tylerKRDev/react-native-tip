@@ -27,10 +27,10 @@
         "react-native": "*"
     },
     "devDependencies": {
-        "react": "16.8.3",
+        "react": "^18.2.0",
         "react-native": "^0.73.5"
     },
     "dependencies": {
-        "uuid": "^9.0.1"
+        "react-native-uuid": "^2.0.1"
     }
 }
