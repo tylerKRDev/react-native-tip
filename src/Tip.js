@@ -1,5 +1,6 @@
 import React from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
+import { v4 as uuidv4 } from 'uuid';
 import TipManager from './TipManager'
 
 const Tip = (props) => {
@@ -40,7 +41,7 @@ const Tip = (props) => {
     function getDimensions(evt) {
         const layout = evt.nativeEvent.layout
 
-        const _id = id || String(new Date().getTime())
+        const _id = id || uuidv4()
         tipId.current = _id
 
         TipManager.registerTip({
