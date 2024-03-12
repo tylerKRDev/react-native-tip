@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
-import 'react-native-get-random-values'
-import { v4 as uuidv4 } from "uuid"
+import { randomUUID } from 'expo-crypto';
 import TipManager from './TipManager'
 
 const Tip = (props) => {
@@ -42,7 +41,7 @@ const Tip = (props) => {
     function getDimensions(evt) {
         const layout = evt.nativeEvent.layout
 
-        const _id = id || uuidv4()
+        const _id = id || randomUUID()
         tipId.current = _id
 
         TipManager.registerTip({

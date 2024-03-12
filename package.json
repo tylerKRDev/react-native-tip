@@ -31,6 +31,7 @@
         "react-native": "^0.73.5"
     },
     "dependencies": {
+        "expo-crypto": "^12.8.1",
         "react-native-get-random-values": "^1.11.0",
         "react-native-uuid": "^2.0.1",
         "uuid": "^9.0.1"
