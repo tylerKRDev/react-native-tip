@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
-import { randomUUID } from 'expo-crypto';
 import TipManager from './TipManager'
 
 const Tip = (props) => {
@@ -38,10 +37,18 @@ const Tip = (props) => {
         TipManager.showTip(tipId.current)
     }
 
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
     function getDimensions(evt) {
         const layout = evt.nativeEvent.layout
 
-        const _id = id || randomUUID()
+        const _id = id || uuidv4()
         tipId.current = _id
 
         TipManager.registerTip({
