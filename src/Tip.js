@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import TipManager from './TipManager'
 
-const Tip = (props) => {
+export default Tip = (props) => {
     const {
         id,
         children,
@@ -20,7 +20,6 @@ const Tip = (props) => {
         onPressItem,
         onDismiss,
         onTipPress,
-        style,
         active = true,
         activeItemStyle,
         pulseStyle,
@@ -32,10 +31,6 @@ const Tip = (props) => {
     useEffect(() => {
         return () => TipManager.unregisterTip(tipId.current)
     }, [])
-
-    function showTip(target) {
-        TipManager.showTip(tipId.current)
-    }
 
     function uuidv4() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -82,10 +77,8 @@ const Tip = (props) => {
         <TouchableWithoutFeedback
             onLayout={getDimensions}
             disabled={!active}
-            onPress={showTip}
+            onPress={() => TipManager.showTip(tipId.current)}
             children={children}
         />
     )
 }
-
-export default Tip

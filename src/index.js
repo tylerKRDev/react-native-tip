@@ -6,11 +6,11 @@ function closeTip() {
     TipManager.closeTip()
 }
 
-function showTip(tipId: string, timeout: number, props: {}) {
+function showTip(tipId, timeout, props) {
     TipManager.showTip(tipId, timeout, props)
 }
 
-function showTipTour(steps: []) {
+function showTipTour(steps) {
     TipManager.showTipTour(steps)
 }
 

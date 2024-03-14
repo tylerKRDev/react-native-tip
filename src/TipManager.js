@@ -41,14 +41,14 @@ class TipManager {
         }
     }
 
-    updateProps(tipId: string, props: any) {
+    updateProps(tipId, props) {
         const index = this.tips.findIndex(i => i.id === tipId)
         const tips = this.tips
         tips[index] = { ...tips[index], ...props }
         this.tips = tips
     }
 
-    showTip(tipId: string, delay: number = 0, props: {}) {
+    showTip(tipId, delay = 0, props) {
         const showItem = () => {
             const tip = this.tips.find(i => i.id === tipId)
             if (!tip) return setTimeout(showItem, 250)
@@ -64,7 +64,7 @@ class TipManager {
         setTimeout(showItem, delay)
     }
 
-    showTipTour(steps: []) {
+    showTipTour(steps) {
         const currentStep = steps[0]
         this.steps = steps
 
@@ -79,8 +79,7 @@ class TipManager {
         setTimeout(showItem, 0)
     }
 
-    changeTipTour(stepTourProps = {}, direction: 'prev' | 'next') {
-        let tries = 0
+    changeTipTour(stepTourProps = {}, direction) {
         this.tipProvider.hideCurrentTip()
 
         if (!stepTourProps) {
