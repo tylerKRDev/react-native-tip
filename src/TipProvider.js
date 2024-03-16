@@ -352,10 +352,9 @@ export default class TipProvider extends Component {
                             </>
                     }
 
-                    {(tourProps?.prevId || tourProps?.nextId) &&
+                    {(tourProps?.prevId || tourProps?.nextId) && !this.props.hideTourActionButtons &&
                         <View style={styles.actions}>
-                            {
-                                !!tourProps.prevId &&
+                            {!!tourProps.prevId &&
                                 <TouchableOpacity
                                     activeOpacity={0.5}
                                     onPress={() =>
@@ -369,8 +368,7 @@ export default class TipProvider extends Component {
                                 </TouchableOpacity>
                             }
 
-                            {
-                                !!tourProps.nextId &&
+                            {!!tourProps.nextId &&
                                 <TouchableOpacity
                                     activeOpacity={0.5}
                                     onPress={() =>
@@ -384,8 +382,7 @@ export default class TipProvider extends Component {
                                 </TouchableOpacity>
                             }
 
-                            {
-                                !!tourProps.prevId && !tourProps.nextId &&
+                            {!!tourProps.prevId && !tourProps.nextId &&
                                 <TouchableOpacity
                                     activeOpacity={0.5}
                                     onPress={this.closeTip}
@@ -409,6 +406,7 @@ export default class TipProvider extends Component {
             children,
             onPressItem,
             destroyItemImediatelly,
+            tourProps,
             layout,
             activeItemStyle,
             showItemPulseAnimation = this.props.showItemPulseAnimation,
@@ -448,6 +446,7 @@ export default class TipProvider extends Component {
                 <TouchableOpacity
                     onPress={() => {
                         if (onPressItem) onPressItem()
+                        else if (tourProps) return
                         else this.closeTip()
                     }}
                 >
