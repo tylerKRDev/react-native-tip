@@ -1,3 +1,5 @@
+import { InteractionManager } from "react-native";
+
 class TipManager {
     tipProvider = null;
     tips = [];
@@ -76,7 +78,7 @@ class TipManager {
             this.tipProvider.showTip(tip)
         }
 
-        setTimeout(showItem, 0)
+        InteractionManager.runAfterInteractions(showItem)
     }
 
     changeTipTour(stepTourProps = {}, direction) {
