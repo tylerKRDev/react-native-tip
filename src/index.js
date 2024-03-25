@@ -1,17 +1,17 @@
-import TipProvider from './TipProvider'
-import Tip from './Tip'
-import TipManager from './TipManager'
+import TipProvider from "./TipProvider"
+import Tip from "./Tip"
+import TipManager from "./TipManager"
 
 function closeTip() {
-    TipManager.closeTip()
+	TipManager.closeTip()
 }
 
 function showTip(tipId, timeout, props) {
-    TipManager.showTip(tipId, timeout, props)
+	TipManager.showTip(tipId, timeout, props)
 }
 
 function showTipTour(steps) {
-    TipManager.showTipTour(steps)
+	TipManager.showTipTour(steps)
 }
 
 export default TipProvider

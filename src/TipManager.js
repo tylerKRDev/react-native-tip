@@ -1,130 +1,130 @@
-import { InteractionManager } from "react-native";
+import { InteractionManager } from "react-native"
 
 class TipManager {
-    tipProvider = null;
-    tips = [];
-    steps = [];
+	tipProvider = null
+	tips = []
+	steps = []
 
-    register(ref) {
-        this.tipProvider = ref
-    }
+	register(ref) {
+		this.tipProvider = ref
+	}
 
-    unregister(ref) {
-        this.tipProvider = null
-    }
+	unregister() {
+		this.tipProvider = null
+	}
 
-    getDefault() {
-        return this.tipProvider
-    }
+	getDefault() {
+		return this.tipProvider
+	}
 
-    registerTip(tip) {
-        if (tip) {
-            const index = this.tips.findIndex(i => i.id === tip.id)
+	registerTip(tip) {
+		if (tip) {
+			const index = this.tips.findIndex((i) => i.id === tip.id)
 
-            if (index >= 0) {
-                const tips = this.tips
-                tips[index] = tip
-                this.tips = tips
-            } else {
-                this.tips = [...this.tips, tip]
-            }
-        }
-    }
+			if (index >= 0) {
+				const tips = this.tips
+				tips[index] = tip
+				this.tips = tips
+			} else {
+				this.tips = [...this.tips, tip]
+			}
+		}
+	}
 
-    unregisterTip(tipId) {
-        if (tipId) {
-            const index = this.tips.findIndex(i => i.id === tipId)
+	unregisterTip(tipId) {
+		if (tipId) {
+			const index = this.tips.findIndex((i) => i.id === tipId)
 
-            if (index >= 0) {
-                const tips = this.tips
-                tips.splice(index, 1)
-                this.tips = tips
-            }
-        }
-    }
+			if (index >= 0) {
+				const tips = this.tips
+				tips.splice(index, 1)
+				this.tips = tips
+			}
+		}
+	}
 
-    updateProps(tipId, props) {
-        const index = this.tips.findIndex(i => i.id === tipId)
-        const tips = this.tips
-        tips[index] = { ...tips[index], ...props }
-        this.tips = tips
-    }
+	updateProps(tipId, props) {
+		const index = this.tips.findIndex((i) => i.id === tipId)
+		const tips = this.tips
+		tips[index] = { ...tips[index], ...props }
+		this.tips = tips
+	}
 
-    showTip(tipId, delay = 0, props) {
-        const showItem = () => {
-            const tip = this.tips.find(i => i.id === tipId)
-            if (!tip) return setTimeout(showItem, 250)
-            tip.tourProps = null
-            this.tipProvider.showTip({ ...tip, ...props })
-        }
+	showTip(tipId, delay = 0, props) {
+		const showItem = () => {
+			const tip = this.tips.find((i) => i.id === tipId)
+			if (!tip) return setTimeout(showItem, 250)
+			tip.tourProps = null
+			this.tipProvider.showTip({ ...tip, ...props })
+		}
 
-        if (tipId && delay) {
-            // Hides current tip but keeps overlay
-            this.tipProvider.hideCurrentTip()
-        }
+		if (tipId && delay) {
+			// Hides current tip but keeps overlay
+			this.tipProvider.hideCurrentTip()
+		}
 
-        setTimeout(showItem, delay)
-    }
+		setTimeout(showItem, delay)
+	}
 
-    showTipTour(steps) {
-        const currentStep = steps[0]
-        this.steps = steps
+	showTipTour(steps) {
+		const currentStep = steps[0]
+		this.steps = steps
 
-        const showItem = () => {
-            let tip = this.tips.find(i => i.id === currentStep.id)
-            if (!tip) return setTimeout(showItem, 250)
-            tip = { ...tip, ...currentStep.tipProps }
-            tip.tourProps = currentStep
-            this.tipProvider.showTip(tip)
-        }
+		const showItem = () => {
+			let tip = this.tips.find((i) => i.id === currentStep.id)
+			if (!tip) return setTimeout(showItem, 250)
+			tip = { ...tip, ...currentStep.tipProps }
+			tip.tourProps = currentStep
+			this.tipProvider.showTip(tip)
+		}
 
-        InteractionManager.runAfterInteractions(showItem)
-    }
+		InteractionManager.runAfterInteractions(showItem)
+	}
 
-    changeTipTour(stepTourProps = {}, direction) {
-        this.tipProvider.hideCurrentTip()
+	changeTipTour(stepTourProps = {}, direction) {
+		this.tipProvider.hideCurrentTip()
 
-        if (!stepTourProps) {
-            this.closeTip()
-            return alert('Next tip id not found! Verify if the item is registered by the time you are calling it.')
-        }
+		if (!stepTourProps) {
+			this.closeTip()
+			return alert(
+				"Next tip id not found! Verify if the item is registered by the time you are calling it."
+			)
+		}
 
-        const showItem = () => {
-            const id = direction === 'prev'
-                ? stepTourProps.prevId
-                : stepTourProps.nextId
+		const showItem = () => {
+			const id = direction === "prev" ? stepTourProps.prevId : stepTourProps.nextId
 
-            if (direction === 'prev' && stepTourProps.prevAction) {
-                stepTourProps.prevAction()
-                setTimeout(() => {
-                    const tip = getTip(id)
-                    this.tipProvider.showTip(tip)
-                }, stepTourProps.delay || 10)
-            } else if (direction === 'next' && stepTourProps.nextAction) {
-                stepTourProps.nextAction()
-                setTimeout(() => {
-                    const tip = getTip(id)
-                    this.tipProvider.showTip(tip)
-                }, stepTourProps.delay || 10)
-            } else {
-                const tip = getTip(id)
-                this.tipProvider.showTip(tip)
-            }
-        }
+			if (direction === "prev" && stepTourProps.prevAction) {
+				stepTourProps.prevAction()
+				setTimeout(() => {
+					const tip = getTip(id)
+					this.tipProvider.showTip(tip)
+				}, stepTourProps.delay || 10)
+			} else if (direction === "next" && stepTourProps.nextAction) {
+				stepTourProps.nextAction()
+				setTimeout(() => {
+					const tip = getTip(id)
+					this.tipProvider.showTip(tip)
+				}, stepTourProps.delay || 10)
+			} else {
+				const tip = getTip(id)
+				this.tipProvider.showTip(tip)
+			}
+		}
 
-        const getTip = (id) => {
-            let tip = this.tips.find(i => i.id === id)
-            tip.tourProps = this.steps.find(i => i.id === id)
-            tip = { ...tip, ...tip.tourProps.tipProps }
-            return tip
-        }
+		const getTip = (id) => {
+			let tip = this.tips.find((i) => i.id === id)
+			tip.tourProps = this.steps.find((i) => i.id === id)
+			tip = { ...tip, ...tip.tourProps.tipProps }
+			return tip
+		}
 
-        setTimeout(showItem, 0)
-    }
+		setTimeout(showItem, 0)
+	}
 
-    closeTip() {
-        this.tipProvider.closeTip()
-    }
+	closeTip() {
+		this.tipProvider.closeTip()
+	}
 }
 
 export default new TipManager()
