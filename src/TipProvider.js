@@ -363,7 +363,7 @@ export default class TipProvider extends Component {
 						</>
 					)}
 
-					{!this.props.hideTourActionButtons && (
+					{!this.props.hideTourActionButtons && tourProps && (
 						<View style={styles.actions}>
 							{!!tourProps.prevId && (
 								<TouchableOpacity
