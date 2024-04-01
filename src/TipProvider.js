@@ -62,11 +62,11 @@ export default class TipProvider extends Component {
 	closeTip = () => {
 		const { tourProps } = this.state
 
+		this.animateOut()
 		// end of tour
-		if (!tourProps?.nextId && tourProps?.nextAction) {
+		if (this.props.tourUndismissable && !tourProps?.nextId && tourProps?.nextAction) {
 			tourProps.nextAction()
 		}
-		this.animateOut()
 	}
 
 	hideCurrentTip = () => {
@@ -164,7 +164,7 @@ export default class TipProvider extends Component {
 					if (onDismiss) {
 						onDismiss()
 					}
-					if (tourProps?.nextId && this.props.tourDismissable) {
+					if (tourProps?.nextId && this.props.tourUndismissable) {
 						TipManager.changeTipTour(tourProps, "next")
 					} else {
 						dismissable && this.closeTip()
@@ -363,7 +363,7 @@ export default class TipProvider extends Component {
 						</>
 					)}
 
-					{(tourProps?.prevId || tourProps?.nextId) && !this.props.hideTourActionButtons && (
+					{!this.props.hideTourActionButtons && (
 						<View style={styles.actions}>
 							{!!tourProps.prevId && (
 								<TouchableOpacity
@@ -385,10 +385,15 @@ export default class TipProvider extends Component {
 								</TouchableOpacity>
 							)}
 
-							{!!tourProps.prevId && !tourProps.nextId && (
+							{!tourProps.nextId && (
 								<TouchableOpacity
 									activeOpacity={0.5}
-									onPress={this.closeTip}
+									onPress={() => {
+										if (tourProps.nextAction) {
+											tourProps.nextAction()
+										}
+										this.closeTip()
+									}}
 									style={_prevNextButtonStyle}
 								>
 									<Text style={_prevNextTextStyle}>{closeButtonLabel}</Text>
