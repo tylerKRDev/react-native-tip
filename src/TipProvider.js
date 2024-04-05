@@ -119,8 +119,6 @@ export default class TipProvider extends Component {
 	}
 
 	animateOut = () => {
-		this.setState({ destroyItemImmediately: true })
-
 		Animated.parallel([
 			Animated.timing(this.animation, {
 				toValue: 0,
@@ -138,7 +136,7 @@ export default class TipProvider extends Component {
 			this.pulseAnim.setValue(0)
 			this.animation.setValue(0)
 			this.overlayAnimation.setValue(0)
-			this.setState({ itemCoordinates: null, tipHasProps: false })
+			this.setState({ itemCoordinates: null, tipHasProps: false, destroyItemImmediately: true })
 		})
 	}
 
