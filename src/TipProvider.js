@@ -55,7 +55,7 @@ export default class TipProvider extends Component {
 		this.setState({
 			...tip,
 			itemCoordinates,
-			destroyItemImediatelly: null,
+			destroyItemImmediately: null,
 		})
 	}
 
@@ -64,13 +64,13 @@ export default class TipProvider extends Component {
 
 		this.animateOut()
 		// end of tour
-		if (this.props.tourUndismissable && !tourProps?.nextId && tourProps?.nextAction) {
+		if (this.props.tourNextOnDismiss && !tourProps?.nextId && tourProps?.nextAction) {
 			tourProps.nextAction()
 		}
 	}
 
 	hideCurrentTip = () => {
-		this.setState({ destroyItemImediatelly: true })
+		this.setState({ destroyItemImmediately: true })
 
 		Animated.parallel([
 			Animated.timing(this.animation, {
@@ -119,7 +119,7 @@ export default class TipProvider extends Component {
 	}
 
 	animateOut = () => {
-		this.setState({ destroyItemImediatelly: true })
+		this.setState({ destroyItemImmediately: true })
 
 		Animated.parallel([
 			Animated.timing(this.animation, {
@@ -147,47 +147,6 @@ export default class TipProvider extends Component {
 		const { height, width } = e.nativeEvent.layout
 		const tipProps = getTipPositionProps(this.state.itemCoordinates, height, width)
 		this.setState({ ...tipProps })
-	}
-
-	renderOverlay() {
-		const {
-			dismissable = true,
-			onDismiss,
-			tourProps,
-			overlayComponent = this.props.overlayComponent,
-			overlayOpacity = this.props.overlayOpacity,
-		} = this.state
-
-		return (
-			<TouchableWithoutFeedback
-				onPress={() => {
-					if (onDismiss) {
-						onDismiss()
-					}
-					if (tourProps?.nextId && this.props.tourUndismissable) {
-						TipManager.changeTipTour(tourProps, "next")
-					} else {
-						dismissable && this.closeTip()
-					}
-				}}
-			>
-				<Animated.View
-					style={{
-						...StyleSheet.absoluteFill,
-						opacity: this.overlayAnimation.interpolate({
-							inputRange: [0, 1],
-							outputRange: [0, 1],
-						}),
-						backgroundColor:
-							!tourProps && overlayComponent
-								? "rgba(0,0,0,0)"
-								: `rgba(0,0,0,${overlayOpacity || 0.6})`,
-					}}
-				>
-					{!tourProps && overlayComponent}
-				</Animated.View>
-			</TouchableWithoutFeedback>
-		)
 	}
 
 	getTipAnimation() {
@@ -254,6 +213,47 @@ export default class TipProvider extends Component {
 					}),
 				}}
 			/>
+		)
+	}
+
+	renderOverlay() {
+		const {
+			dismissable = this.props.tourDismissable || true,
+			onDismiss,
+			tourProps,
+			overlayComponent = this.props.overlayComponent,
+			overlayOpacity = this.props.overlayOpacity,
+		} = this.state
+
+		return (
+			<TouchableWithoutFeedback
+				onPress={() => {
+					if (onDismiss) {
+						onDismiss()
+					}
+					if (tourProps?.nextId && this.props.tourNextOnDismiss) {
+						TipManager.changeTipTour(tourProps, "next")
+					} else {
+						dismissable && this.closeTip()
+					}
+				}}
+			>
+				<Animated.View
+					style={{
+						...StyleSheet.absoluteFill,
+						opacity: this.overlayAnimation.interpolate({
+							inputRange: [0, 1],
+							outputRange: [0, 1],
+						}),
+						backgroundColor:
+							!tourProps && overlayComponent
+								? "rgba(0,0,0,0)"
+								: `rgba(0,0,0,${overlayOpacity || 0.6})`,
+					}}
+				>
+					{!tourProps && overlayComponent}
+				</Animated.View>
+			</TouchableWithoutFeedback>
 		)
 	}
 
@@ -411,18 +411,17 @@ export default class TipProvider extends Component {
 			itemCoordinates,
 			children,
 			onPressItem,
-			destroyItemImediatelly,
+			destroyItemImmediately,
 			tourProps,
 			layout,
 			activeItemStyle,
 			showItemPulseAnimation = this.props.showItemPulseAnimation,
 		} = this.state
 
-		if (destroyItemImediatelly) return null
+		if (destroyItemImmediately) return null
 
 		const item = React.cloneElement(children, {
 			...children.props,
-			onPressOut: () => onPressItem && onPressItem(),
 			style: clearItemStyles(children.props?.style),
 		})
 
@@ -448,12 +447,17 @@ export default class TipProvider extends Component {
 					})}
 
 				<TouchableOpacity
-					onPress={() => {
-						if (onPressItem) onPressItem()
-						else if (tourProps) return
-						else this.closeTip()
-					}}
+					disabled={!onPressItem}
+					onPress={() => onPressItem && onPressItem()}
+					style={{ flex: 1 }}
 				>
+					<View
+						style={{
+							...StyleSheet.absoluteFillObject,
+							zIndex: 1,
+						}}
+						onTouchStart={(e) => e.stopPropagation()}
+					/>
 					{item}
 				</TouchableOpacity>
 			</View>
